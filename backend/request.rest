@@ -1,0 +1,60 @@
+### REGISTER
+POST https://backend-service-122089089856.us-central1.run.app/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### LOGIN → dapatkan token
+POST https://backend-service-122089089856.us-central1.run.app/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### GANTI TOKEN DI BAWAH INI SETELAH LOGIN
+@token=PASTE_TOKEN_DISINI
+
+### GET semua users (butuh token)
+GET https://backend-service-122089089856.us-central1.run.app/users
+Authorization: Bearer {{token}}
+
+###
+
+### POST user baru (butuh token)
+POST https://backend-service-122089089856.us-central1.run.app/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "author": "Damai",
+    "about": "Daily",
+    "note": "Today I'm going to the gym with my friend"
+}
+
+###
+
+### PATCH user id=15 (butuh token)
+PATCH https://backend-service-122089089856.us-central1.run.app/users/15
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "author": "Abrar",
+    "about": "Daily",
+    "note": "Today I'm going to the gym with my friend"
+}
+
+###
+
+### DELETE user id=14 (butuh token)
+DELETE https://backend-service-122089089856.us-central1.run.app/users/14
+Authorization: Bearer {{token}}
