@@ -11,10 +11,12 @@ steps:
     args: [
       'run', 'deploy', 'backend-service',
       '--image', 'gcr.io/$PROJECT_ID/backend-service',
-      '--timeout', '1000s', '--port', '5000',
+      '--timeout', '1000s',
       '--region', 'us-central1',
       '--platform', 'managed',
       '--allow-unauthenticated',
+      '--set-env-vars',
+      'JWT_SECRET=rahasia_super_aman,JWT_EXPIRES_IN=1d,DB_HOST=34.121.20.199,DB_USER=root,DB_PASSWORD=123220024,DB_NAME=notes'
     ]
 
 options:

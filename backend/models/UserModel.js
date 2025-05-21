@@ -1,18 +1,26 @@
-import { Sequelize } from "sequelize";
-import db from "../config/database.js";
+const { Sequelize, DataTypes } = require("sequelize");
+const db = require("../config/database");
 
-const {DataTypes} = Sequelize;
-
-const User = db.define('users', {
+const User = db.define(
+  "users",
+  {
     author: DataTypes.STRING,
     about: DataTypes.STRING,
-    note: DataTypes.STRING
-}, {
-    freezeTableName: true
-});
+    note: DataTypes.STRING,
+  },
+  {
+    freezeTableName: true,
+  }
+);
 
-export default User;
-
-(async()=>{
+// Sinkronisasi database — hanya aktif jika belum ada
+(async () => {
+  try {
     await db.sync();
+    console.log("✅ User table synced");
+  } catch (err) {
+    console.error("❌ Sync error:", err.message);
+  }
 })();
+
+module.exports = User;
