@@ -1,11 +1,12 @@
-require("dotenv").config(); 
+require("dotenv").config();
+console.log("🚀 Starting server... loading dependencies...");
 
 const express = require("express");
 const cors = require("cors");
+const db = require("./config/database");
 
 const authRoutes = require("./routes/AuthRoute");
 const userRoutes = require("./routes/UserRoute");
-const db = require("./config/database"); // ⬅️ Import koneksi database
 
 const app = express();
 
@@ -17,7 +18,9 @@ app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 8080;
 
-// ✅ Cek koneksi database sebelum jalanin server
+// ✅ Tambahkan log saat cek koneksi
+console.log("🧪 Checking database connection...");
+
 db.authenticate()
   .then(() => {
     console.log("✅ Database connected successfully");
@@ -28,5 +31,5 @@ db.authenticate()
   })
   .catch((err) => {
     console.error("❌ Database connection failed:", err.message);
-    process.exit(1); // ⬅️ Hentikan container jika koneksi DB gagal
+    process.exit(1);
   });
