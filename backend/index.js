@@ -11,8 +11,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 
-// ✅ Gunakan PORT dari Cloud Run, fallback ke 8080 saat lokal
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
