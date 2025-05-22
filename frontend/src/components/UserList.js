@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { BASE_URL } from '../utils';
+import LogoutButton from "./LogoutButton";
 
 const UserList = () => {
   const [users, setUser] = useState([]);
@@ -12,26 +13,39 @@ const UserList = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/users`);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
-  const deleteUser = async (id) =>{
+  const deleteUser = async (id) => {
     try {
-        await axios.delete(`${BASE_URL}/users/${id}`);
-        getUsers();
+      const token = localStorage.getItem("token");
+      await axios.delete(`${BASE_URL}/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      getUsers();
     } catch (error) {
-        console.log(error)
+      console.log(error)
     }
-  }
+  };
 
   return (
     <div className="columns mt-5 is-centered">
       <div className="column is-three-quarters">
-        <h1 className="title is-2 has-text-centered">Daftar Catatan Pengguna</h1>
+        <div className="is-flex is-justify-content-space-between is-align-items-center mb-3">
+          <h1 className="title is-2">Daftar Catatan Pengguna</h1>
+          <LogoutButton />
+        </div>
         <div className="mb-4">
           <Link to={`add`} className='button is-success'>
             <span className="icon">
@@ -60,14 +74,14 @@ const UserList = () => {
                   <td>{user.note}</td>
                   <td className="has-text-centered">
                     <div className="buttons is-centered">
-                      <div className="is-flex is-align-items-center"> {/* Container untuk berdampingan */}
+                      <div className="is-flex is-align-items-center">
                         <Link to={`edit/${user.id}`} className="button is-small is-info mr-1">
                           <span className="icon">
                             <i className="fas fa-edit"></i>
                           </span>
                           <span>Edit</span>
                         </Link>
-                        <button onClick={()=> deleteUser(user.id)} className="button is-small is-danger">
+                        <button onClick={() => deleteUser(user.id)} className="button is-small is-danger">
                           <span className="icon">
                             <i className="fas fa-trash"></i>
                           </span>
