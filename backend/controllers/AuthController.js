@@ -37,7 +37,14 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const [rows] = await db.query("SELECT * FROM admin WHERE username = ?", [username]);
+    const rows = await db.query(
+    "SELECT * FROM admin WHERE username = ?",
+    {
+        replacements: [username],
+        type: QueryTypes.SELECT
+    }
+    );
+    
     if (rows.length === 0) return res.status(404).json({ error: "User tidak ditemukan" });
 
     const valid = await bcrypt.compare(password, rows[0].password);
