@@ -1,12 +1,27 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const LogoutButton = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: 'Yakin ingin logout?',
+      text: 'Kamu akan keluar dari sesi sekarang.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Ya, logout',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      localStorage.removeItem("token");
+      Swal.fire('Berhasil!', 'Anda telah logout.', 'success');
+      navigate("/login");
+    }
   };
 
   return (

@@ -9,6 +9,8 @@ const AddUser = () => {
   const [author, setAuthor] = useState("");
   const [about, setAbout] = useState("");
   const [note, setNote] = useState("");
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
   const saveUser = async (e) => {
@@ -16,7 +18,7 @@ const AddUser = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `${BASE_URL}/users`,
+        `${BASE_URL}/api/users`,
         { author, about, note },
         {
           headers: {
@@ -24,19 +26,32 @@ const AddUser = () => {
           },
         }
       );
-      navigate("/users");
+      setIsError(false);
+      setMessage("Catatan berhasil disimpan.");
+      setTimeout(() => navigate("/users"), 1000);
     } catch (error) {
-      console.log(error);
+      const msg =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        "Gagal membuat catatan. Periksa panjang karakter dan coba lagi.";
+      setMessage(msg);
+      setIsError(true);
     }
   };
 
   return (
-    <div className="columns mt-6 is-centered">
-      <div className="column is-half">
+    <div className="columns is-centered mt-6 mx-2">
+      <div className="column is-12-mobile is-8-tablet is-6-desktop">
         <div className="box p-5">
-          <h1 className="title is-3 has-text-centered has-text-success">
+          <h1 className="title is-4-mobile is-3-tablet has-text-centered has-text-success">
             <i className="fas fa-plus-circle mr-2"></i> Tambah Catatan
           </h1>
+
+          {message && (
+            <div className={`notification ${isError ? "is-danger" : "is-success"} is-light`}>
+              {message}
+            </div>
+          )}
 
           <form onSubmit={saveUser}>
             <div className="field">
@@ -47,7 +62,7 @@ const AddUser = () => {
                   className="input"
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="Nama penulis"
+                  placeholder="Nama penulis (min 3 karakter)"
                   required
                 />
               </div>
@@ -61,7 +76,7 @@ const AddUser = () => {
                   className="input"
                   value={about}
                   onChange={(e) => setAbout(e.target.value)}
-                  placeholder="Topik catatan"
+                  placeholder="Topik catatan (min 3 karakter)"
                   required
                 />
               </div>
@@ -74,20 +89,20 @@ const AddUser = () => {
                   className="textarea"
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  placeholder="Isi catatan"
+                  placeholder="Isi catatan (min 5 karakter)"
                   required
                 ></textarea>
               </div>
             </div>
 
-            <div className="field is-grouped is-justify-content-end mt-5">
-              <div className="control">
-                <Link to="/users" className="button is-light">
+            <div className="field is-grouped is-justify-content-end is-flex-wrap-wrap mt-5">
+              <div className="control mb-2 mr-2">
+                <Link to="/users" className="button is-light is-fullwidth">
                   Batal
                 </Link>
               </div>
-              <div className="control">
-                <button type="submit" className="button is-success">
+              <div className="control mb-2">
+                <button type="submit" className="button is-success is-fullwidth">
                   Simpan
                 </button>
               </div>

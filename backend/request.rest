@@ -1,4 +1,4 @@
-### 📌 REGISTER admin (ke tabel admin)
+### 📌 REGISTER Admin (tabel admin)
 POST https://backend-service-122089089856.us-central1.run.app/api/auth/register
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ###
 
-### 🔐 LOGIN untuk mendapatkan token
+### 🔐 LOGIN Admin (untuk mendapatkan token)
 POST https://backend-service-122089089856.us-central1.run.app/api/auth/login
 Content-Type: application/json
 
@@ -25,13 +25,19 @@ Content-Type: application/json
 
 ###
 
-### 📥 GET semua notes (tabel users)
+### 📥 GET Semua Catatan (tabel users)
 GET https://backend-service-122089089856.us-central1.run.app/api/users
 Authorization: Bearer {{token}}
 
 ###
 
-### ➕ POST notes baru
+### 🔍 GET Detail Catatan by ID
+GET https://backend-service-122089089856.us-central1.run.app/api/users/15
+Authorization: Bearer {{token}}
+
+###
+
+### ➕ POST Catatan Baru
 POST https://backend-service-122089089856.us-central1.run.app/api/users
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -39,24 +45,24 @@ Authorization: Bearer {{token}}
 {
   "author": "Damai",
   "about": "Daily",
-  "note": "Today I'm going to the gym with my friend"
+  "note": "Hari ini saya akan belajar fullstack development"
 }
 
 ###
 
-### ✏️ PATCH notes dengan id=15
+### ✏️ PATCH / Update Catatan dengan ID=15
 PATCH https://backend-service-122089089856.us-central1.run.app/api/users/15
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "author": "Abrar",
+  "author": "Damai Updated",
   "about": "Updated Daily",
-  "note": "Changed note for testing update"
+  "note": "Ini hasil update data catatan"
 }
 
 ###
 
-### ❌ DELETE notes dengan id=14
+### ❌ DELETE Catatan dengan ID=14
 DELETE https://backend-service-122089089856.us-central1.run.app/api/users/14
 Authorization: Bearer {{token}}
