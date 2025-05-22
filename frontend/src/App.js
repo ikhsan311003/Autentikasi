@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route
-          path="/"
+          path="/users"
           element={
             <PrivateRoute>
               <UserList />

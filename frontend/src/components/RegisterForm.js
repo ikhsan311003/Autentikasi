@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -15,38 +18,71 @@ const RegisterForm = () => {
         password,
       });
       setMessage(response.data.message);
+      setIsError(false);
+      setTimeout(() => navigate("/login"), 1500); // redirect otomatis ke login
     } catch (error) {
-      setMessage(
-        error.response?.data?.error || "Terjadi kesalahan saat registrasi"
-      );
+      setMessage(error.response?.data?.error || "Registrasi gagal");
+      setIsError(true);
     }
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto" }}>
-      <h2>Register Admin</h2>
-      <form onSubmit={handleRegister}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="container mt-6">
+      <div className="column is-half is-offset-one-quarter">
+        <div className="box p-5">
+          <h2 className="title is-3 has-text-centered has-text-info">
+            <i className="fas fa-user-plus mr-2"></i> Register Admin Baru
+          </h2>
+
+          {message && (
+            <div className={`notification ${isError ? "is-danger" : "is-success"}`}>
+              {message}
+            </div>
+          )}
+
+          <form onSubmit={handleRegister}>
+            <div className="field">
+              <label className="label">Username</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Buat username"
+                  required
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-user-circle"></i>
+                </span>
+              </div>
+            </div>
+
+            <div className="field">
+              <label className="label">Password</label>
+              <div className="control has-icons-left">
+                <input
+                  className="input"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Buat password"
+                  required
+                />
+                <span className="icon is-small is-left">
+                  <i className="fas fa-lock"></i>
+                </span>
+              </div>
+            </div>
+
+            <div className="field is-grouped is-grouped-centered mt-5">
+              <div className="control">
+                <button className="button is-info is-fullwidth">Register</button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Register</button>
-      </form>
-      {message && <p>{message}</p>}
+      </div>
     </div>
   );
 };
