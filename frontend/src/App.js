@@ -5,6 +5,7 @@ import EditUser from "./components/EditUser";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import PrivateRoute from "./components/PrivateRoute";
+import 'bulma/css/bulma.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 

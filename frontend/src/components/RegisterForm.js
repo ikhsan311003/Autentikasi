@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils";
+import 'bulma/css/bulma.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
