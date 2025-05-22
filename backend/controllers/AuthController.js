@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../config/database");
+const { QueryTypes } = require("sequelize");
 require("dotenv").config();
 
 exports.register = async (req, res) => {
@@ -11,9 +12,12 @@ exports.register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.execute(
+    await db.query(
     "INSERT INTO admin (username, password, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())",
-    [username, hashedPassword]
+    {
+        replacements: [username, hashedPassword],
+        type: db.QueryTypes.INSERT
+    }
     );
 
     res.status(201).json({ message: "Registrasi berhasil" });
