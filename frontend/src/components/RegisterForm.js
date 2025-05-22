@@ -19,9 +19,11 @@ const RegisterForm = () => {
         username,
         password,
       });
-      setMessage(response.data.message);
-      setIsError(false);
-      setTimeout(() => navigate("/login"), 1500); // redirect otomatis ke login
+      if (response.status === 201) {
+        setMessage("Registrasi berhasil! Mengarahkan ke login...");
+        setIsError(false);
+        setTimeout(() => navigate("/login"), 1500);
+      }
     } catch (error) {
       setMessage(error.response?.data?.error || "Registrasi gagal");
       setIsError(true);
@@ -33,13 +35,11 @@ const RegisterForm = () => {
       <div className="column is-half is-offset-one-quarter">
         <div className="box p-5">
           <h2 className="title is-3 has-text-centered has-text-info">
-            <i className="fas fa-user-plus mr-2"></i> Register Admin Baru
+            <i className="fas fa-user-plus mr-2"></i> Daftar Admin Baru
           </h2>
 
           {message && (
-            <div className={`notification ${isError ? "is-danger" : "is-success"}`}>
-              {message}
-            </div>
+            <div className={`notification ${isError ? "is-danger" : "is-success"}`}>{message}</div>
           )}
 
           <form onSubmit={handleRegister}>
@@ -51,7 +51,7 @@ const RegisterForm = () => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Buat username"
+                  placeholder="Masukkan username"
                   required
                 />
                 <span className="icon is-small is-left">
@@ -68,7 +68,7 @@ const RegisterForm = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Buat password"
+                  placeholder="Masukkan password"
                   required
                 />
                 <span className="icon is-small is-left">
@@ -77,10 +77,10 @@ const RegisterForm = () => {
               </div>
             </div>
 
-            <div className="field is-grouped is-grouped-centered mt-5">
-              <div className="control">
-                <button className="button is-info is-fullwidth">Register</button>
-              </div>
+            <div className="field mt-5">
+              <button type="submit" className="button is-info is-fullwidth">
+                Register
+              </button>
             </div>
           </form>
         </div>
