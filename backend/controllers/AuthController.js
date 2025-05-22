@@ -11,10 +11,11 @@ exports.register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    await db.query(
-      "INSERT INTO admin (username, password, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())",
-      [username, hashedPassword]
+    await db.execute(
+    "INSERT INTO admin (username, password, createdAt, updatedAt) VALUES (?, ?, NOW(), NOW())",
+    [username, hashedPassword]
     );
+
     res.status(201).json({ message: "Registrasi berhasil" });
   } catch (err) {
     if (err.code === "ER_DUP_ENTRY") {
