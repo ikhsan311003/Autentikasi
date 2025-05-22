@@ -5,7 +5,7 @@ import { BASE_URL } from '../utils';
 import LogoutButton from "./LogoutButton";
 
 const UserList = () => {
-  const [users, setUser] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,16 +14,19 @@ const UserList = () => {
 
   const getUsers = async () => {
     setLoading(true);
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.get(`${BASE_URL}/users`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      setUser(response.data);
+      setUsers(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching users:", error);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -31,8 +34,9 @@ const UserList = () => {
 
   const deleteUser = async (id) => {
     if (!window.confirm("Yakin ingin menghapus catatan ini?")) return;
+    const token = localStorage.getItem("token");
+
     try {
-      const token = localStorage.getItem("token");
       await axios.delete(`${BASE_URL}/users/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -40,7 +44,7 @@ const UserList = () => {
       });
       getUsers();
     } catch (error) {
-      console.log(error)
+      console.error("Gagal menghapus catatan:", error);
     }
   };
 
@@ -55,7 +59,7 @@ const UserList = () => {
         </div>
 
         <div className="mb-4">
-          <Link to={`add`} className='button is-primary is-rounded'>
+          <Link to="/add" className="button is-primary is-rounded">
             <span className="icon">
               <i className="fas fa-plus-circle"></i>
             </span>
@@ -66,8 +70,12 @@ const UserList = () => {
         <div className="box has-shadow mt-3">
           {loading ? (
             <progress className="progress is-small is-link" max="100">
-              Loading
+              Loading...
             </progress>
+          ) : users.length === 0 ? (
+            <p className="has-text-centered has-text-grey">
+              Tidak ada catatan yang tersedia.
+            </p>
           ) : (
             <div className="table-container">
               <table className="table is-bordered is-striped is-fullwidth is-hoverable">
@@ -89,23 +97,24 @@ const UserList = () => {
                       <td>{user.note}</td>
                       <td className="has-text-centered">
                         <div className="buttons is-centered">
-                          <div className="is-flex is-align-items-center">
-                            <Link to={`edit/${user.id}`} className="button is-small is-info mr-1">
-                              <span className="icon">
-                                <i className="fas fa-edit"></i>
-                              </span>
-                              <span>Edit</span>
-                            </Link>
-                            <button
-                              onClick={() => deleteUser(user.id)}
-                              className="button is-small is-danger"
-                            >
-                              <span className="icon">
-                                <i className="fas fa-trash"></i>
-                              </span>
-                              <span>Delete</span>
-                            </button>
-                          </div>
+                          <Link
+                            to={`/edit/${user.id}`}
+                            className="button is-small is-info mr-1"
+                          >
+                            <span className="icon">
+                              <i className="fas fa-edit"></i>
+                            </span>
+                            <span>Edit</span>
+                          </Link>
+                          <button
+                            onClick={() => deleteUser(user.id)}
+                            className="button is-small is-danger"
+                          >
+                            <span className="icon">
+                              <i className="fas fa-trash"></i>
+                            </span>
+                            <span>Delete</span>
+                          </button>
                         </div>
                       </td>
                     </tr>

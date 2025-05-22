@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import 'bulma/css/bulma.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -22,7 +22,7 @@ const LoginForm = () => {
       localStorage.setItem("token", res.data.token);
       setMessage("Login berhasil! Mengarahkan...");
       setIsError(false);
-      navigate("/users");
+      setTimeout(() => navigate("/users"), 1000);
     } catch (err) {
       setMessage(err.response?.data?.error || "Login gagal");
       setIsError(true);
@@ -35,9 +35,13 @@ const LoginForm = () => {
         <h2 className="title is-3 has-text-centered has-text-link">
           <i className="fas fa-sign-in-alt mr-2"></i> Login Admin
         </h2>
+
         {message && (
-          <div className={`notification ${isError ? "is-danger" : "is-success"}`}>{message}</div>
+          <div className={`notification ${isError ? "is-danger" : "is-success"}`}>
+            {message}
+          </div>
         )}
+
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label className="label">Username</label>
@@ -81,6 +85,15 @@ const LoginForm = () => {
             </button>
           </div>
         </form>
+
+        <div className="has-text-centered mt-4">
+          <p>
+            Belum punya akun? {" "}
+            <Link to="/register" className="has-text-link has-text-weight-semibold">
+              Register di sini
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
