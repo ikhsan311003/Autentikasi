@@ -6,7 +6,8 @@ handlers:
   - url: /(.*)
     static_files: build/index.html
     upload: build/index.html
-    secure: always
 
-  - url: /
+  - url: /(.*)
     static_dir: build
+
+default_expiration: '1h'
