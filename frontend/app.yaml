@@ -3,12 +3,10 @@ service: frontend-service
 instance_class: F1
 
 handlers:
-  - url: /(.*\.(js|css|png|jpg|ico|json|woff2|ttf|svg))
-    static_files: build/\1
-    upload: build/.*\.(js|css|png|jpg|ico|json|woff2|ttf|svg)
-
-  - url: /.*
+  - url: /(.*)
     static_files: build/index.html
     upload: build/index.html
+    secure: always
 
-default_expiration: "1h"
+  - url: /
+    static_dir: build
